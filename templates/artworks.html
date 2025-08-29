@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>🎨 Artworks</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>🖼️ Artworks</h2>
+        <a href="{{ url_for('add_artwork') }}" class="btn btn-primary">+ Add Artwork</a>
+    </div>
+
+    <div class="row">
+        {% for artwork in artworks %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                {% if artwork.image_url %}
+                    <img src="{{ artwork.image_url }}" class="card-img-top" alt="{{ artwork.title }}">
+                {% else %}
+                    <img src="https://via.placeholder.com/400x250?text=No+Image" class="card-img-top" alt="No Image">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ artwork.title }}</h5>
+                    <h6 class="card-subtitle text-muted">By {{ artwork.artist_name }}</h6>
+                    <p class="card-text mt-2">{{ artwork.description or "No description available." }}</p>
+                    {% if artwork.price %}
+                        <p class="fw-bold text-success">₹{{ "%.2f"|format(artwork.price) }}</p>
+                    {% endif %}
+                    <a href="{{ url_for('edit_artwork', id=artwork.id) }}" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="{{ url_for('delete_artwork', id=artwork.id) }}" class="btn btn-danger btn-sm"
+                        onclick="return confirm('Are you sure you want to delete this artwork?');">Delete</a>
+                        <a href="{{ url_for('buy_artwork', id=artwork.id) }}"class="btn btn-primary btn-sm">Buy</a>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <p>No artworks found. <a href="{{ url_for('add_artwork') }}">Add the first one!</a></p>
+        {% endfor %}
+    </div>
+</div>
+
+</body>
+</html>
